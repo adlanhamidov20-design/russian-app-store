@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RusApp Store</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #101116;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: #8b5cf6;
+    }
+
+    .subtitle {
+      color: #9999aa;
+      margin-top: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #292a35;
+      border-radius: 14px;
+      background: #1b1c24;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #8b5cf6;
+    }
+
+    .categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 18px 0;
+      padding-bottom: 5px;
+    }
+
+    .category {
+      border: 0;
+      border-radius: 20px;
+      padding: 10px 16px;
+      white-space: nowrap;
+      background: #1b1c24;
+      color: #aaaaba;
+      cursor: pointer;
+    }
+
+    .category.active {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 24px 0 16px;
+    }
+
+    .apps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .app {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px;
+      background: #1b1c24;
+      border: 1px solid #292a35;
+      border-radius: 18px;
+    }
+
+    .app-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      flex-shrink: 0;
+      background: #292a35;
+    }
+
+    .app-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .app-name {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .app-category {
+      color: #9999aa;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .download {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background: #8b5cf6;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .empty {
+      color: #9999aa;
+      text-align: center;
+      padding: 30px;
+    }
+
+    footer {
+      text-align: center;
+      color: #666675;
+      font-size: 12px;
+      margin: 30px 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">Rus<span>App</span> Store</div>
+    <div class="subtitle">Российские приложения в одном месте 🇷🇺</div>
+  </header>
+
+  <input
+    id="search"
+    type="search"
+    placeholder="🔍 Найти приложение..."
+  >
+
+  <div class="categories" id="categories"></div>
+
+  <h2>Популярные приложения</h2>
+
+  <div class="apps" id="apps"></div>
+
+  <footer>
+    RusApp Store · Каталог приложений
+  </footer>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    const applications = [
+      {
+        name: "VK",
+        category: "Социальные сети",
+        icon: "💙",
+        url: "https://www.rustore.ru/catalog/app/com.vkontakte.android"
+      },
+      {
+        name: "Одноклассники",
+        category: "Социальные сети",
+        icon: "🟠",
+        url: "https://www.rustore.ru/catalog/app/ru.ok.android"
+      },
+      {
+        name: "Яндекс Браузер",
+        category: "Инструменты",
+        icon: "🔴",
+        url: "https://www.rustore.ru/catalog/app/com.yandex.browser"
+      },
+      {
+        name: "Ozon",
+        category: "Покупки",
+        icon: "🛍️",
+        url: "https://www.rustore.ru/catalog/app/ru.ozon.app"
+      },
+      {
+        name: "СберБанк Онлайн",
+        category: "Финансы",
+        icon: "💚",
+        url: "https://www.rustore.ru/catalog/app/ru.sberbankmobile"
+      },
+      {
+        name: "RuStore",
+        category: "Инструменты",
+        icon: "📱",
+        url: "https://www.rustore.ru/"
+      }
+    ];
+
+    const categories = [
+      "Все",
+      ...new Set(applications.map(app => app.category))
+    ];
+
+    let selectedCategory = "Все";
+
+    const categoryContainer =
+      document.getElementById("categories");
+
+    const appContainer =
+      document.getElementById("apps");
+
+    const searchInput =
+      document.getElementById("search");
+
+    function renderCategories() {
+      categoryContainer.innerHTML = "";
+
+      categories.forEach(category => {
+        const button = document.createElement("button");
+
+        button.className =
+          "category" +
+          (category === selectedCategory ? " active" : "");
+
+        button.textContent = category;
+
+        button.onclick = () => {
+          selectedCategory = category;
+          renderCategories();
+          renderApps();
+        };
+
+        categoryContainer.appendChild(button);
+      });
+    }
+
+    function renderApps() {
+      const search = searchInput.value.toLowerCase();
+
+      const filtered = applications.filter(app => {
+        const matchesSearch =
+          app.name.toLowerCase().includes(search);
+
+        const matchesCategory =
+          selectedCategory === "Все" ||
+          app.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      appContainer.innerHTML = "";
+
+      if (filtered.length === 0) {
+        appContainer.innerHTML =
+          '<div class="empty">Ничего не найдено 😔</div>';
+
+        return;
+      }
+
+      filtered.forEach(app => {
+        const card = document.createElement("div");
+
+        card.className = "app";
+
+        card.innerHTML = `
+          <div class="app-icon">${app.icon}</div>
+
+          <div class="app-info">
+            <div class="app-name">${app.name}</div>
+            <div class="app-category">${app.category}</div>
+          </div>
+
+          <a
+            class="download"
+            href="${app.url}"
+            target="_blank"
+            rel="noopener"
+          >
+            Скачать
+          </a>
+        `;
+
+        appContainer.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener("input", renderApps);
+
+    renderCategories();
+    renderApps();
+  </script>
+</body>
+</html>
