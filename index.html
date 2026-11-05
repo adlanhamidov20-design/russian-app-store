@@ -1,179 +1,277 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#ffffff">
-<title>RusApp Store</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#f6f7fb;color:#171923;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- padding:22px 17px 35px;
-}
-header{padding:12px 2px 22px}
-.logo{font-size:29px;font-weight:850;letter-spacing:-1.2px}
-.logo span{color:#7357ed}
-.subtitle{color:#9295a3;font-size:14px;margin-top:6px}
-.search{
- width:100%;padding:16px;border:1px solid #e9eaf0;
- border-radius:17px;background:white;font-size:15px;
- outline:none;box-shadow:0 3px 12px #20243a08;
-}
-.search:focus{border-color:#927cf4}
-h2{font-size:20px;margin:27px 0 15px}
-.categories{
- display:flex;gap:9px;overflow-x:auto;
- padding:2px 0 8px;scrollbar-width:none;
-}
-.categories::-webkit-scrollbar{display:none}
-.category{
- border:0;padding:11px 17px;border-radius:30px;
- background:white;color:#666a78;white-space:nowrap;
- font-size:13px;font-weight:650;
-}
-.category.active{background:#7357ed;color:white}
-.featured{
- background:linear-gradient(120deg,#7357ed,#a18cf7);
- color:white;padding:22px;border-radius:23px;
- margin-top:20px;
-}
-.featured small{opacity:.8}
-.featured h2{font-size:23px;margin:8px 0}
-.featured p{font-size:13px;opacity:.9;margin-bottom:0}
-.apps{display:grid;grid-template-columns:1fr;gap:12px}
-.app{
- background:white;border:1px solid #eeeeF4;
- border-radius:19px;padding:14px;
- display:flex;align-items:center;gap:13px;
- box-shadow:0 4px 15px #20243a08;
-}
-.app-icon{
- width:57px;height:57px;border-radius:16px;
- display:flex;align-items:center;justify-content:center;
- font-size:29px;background:#f1efff;flex-shrink:0;
-}
-.info{flex:1;min-width:0}
-.name{font-size:15px;font-weight:750}
-.desc{font-size:12px;color:#9295a3;margin-top:5px}
-.download{
- background:#7357ed;color:white;text-decoration:none;
- padding:10px 13px;border-radius:12px;
- font-size:12px;font-weight:700;white-space:nowrap;
-}
-.empty{text-align:center;color:#9295a3;padding:30px}
-footer{text-align:center;color:#a3a5b0;font-size:12px;margin-top:35px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b12">
+  <title>RusApp Store — приложения для iPhone</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #090b12;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 22px 16px 45px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg,#8058ff,#4931bd);
+      font-size: 25px;
+    }
+    h1 { font-size: 22px; margin: 0; }
+    .subtitle { color: #9295a5; font-size: 13px; margin-top: 4px; }
+    .hero {
+      padding: 24px;
+      border-radius: 23px;
+      background: linear-gradient(135deg,#30205d,#171b36);
+      margin-bottom: 23px;
+    }
+    .hero small { color: #c8baff; }
+    .hero h2 { font-size: 25px; margin: 12px 0 8px; }
+    .hero p { color: #c4c4d3; line-height: 1.5; font-size: 14px; margin: 0; }
+    .search {
+      width: 100%;
+      padding: 15px 17px;
+      border: 1px solid #292d3b;
+      border-radius: 15px;
+      background: #151823;
+      color: white;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 17px;
+    }
+    .search:focus { border-color: #8062ff; }
+    .categories {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+    .category {
+      white-space: nowrap;
+      border: 1px solid #292d3b;
+      border-radius: 20px;
+      background: #151823;
+      color: #c4c6d1;
+      padding: 9px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .category.active {
+      background: #7655ed;
+      border-color: #7655ed;
+      color: white;
+    }
+    .section-title {
+      font-size: 19px;
+      margin: 15px 0;
+    }
+    .apps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .app {
+      background: #151823;
+      border: 1px solid #252a38;
+      border-radius: 18px;
+      padding: 15px;
+      min-width: 0;
+    }
+    .app-icon {
+      width: 53px;
+      height: 53px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: #27213e;
+      font-size: 27px;
+      margin-bottom: 12px;
+    }
+    .app h3 { font-size: 15px; margin: 0 0 6px; }
+    .app p {
+      color: #999dad;
+      font-size: 12px;
+      line-height: 1.4;
+      min-height: 34px;
+      margin: 0 0 13px;
+    }
+    .install {
+      display: block;
+      text-align: center;
+      padding: 10px 5px;
+      background: #7655ed;
+      color: white;
+      text-decoration: none;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .install:active { opacity: .75; }
+    .empty {
+      display: none;
+      color: #999dad;
+      text-align: center;
+      padding: 30px 5px;
+      grid-column: 1 / -1;
+    }
+    footer {
+      color: #777c8e;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 30px;
+    }
+    @media (max-width: 350px) {
+      .apps { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
-<header>
- <div class="logo">Rus<span>App</span> Store</div>
- <div class="subtitle">Твои любимые приложения в одном месте 🇷🇺</div>
-</header>
+  <main class="container">
+    <header>
+      <div class="logo">🇷🇺</div>
+      <div>
+        <h1>RusApp Store</h1>
+        <div class="subtitle">Российские приложения для iPhone</div>
+      </div>
+    </header>
 
-<input class="search" id="search" placeholder="🔍 Поиск приложений...">
+    <section class="hero">
+      <small>🍎 МИР ПРИЛОЖЕНИЙ ДЛЯ iPHONE</small>
+      <h2>Всё нужное — в одном месте</h2>
+      <p>Находи российские приложения и переходи к их официальным страницам в App Store.</p>
+    </section>
 
-<div class="featured">
- <small>ДОБРО ПОЖАЛОВАТЬ</small>
- <h2>Открывай новое 🚀</h2>
- <p>Находи полезные приложения каждый день</p>
-</div>
+    <input
+      class="search"
+      id="search"
+      type="search"
+      placeholder="🔍 Найти приложение..."
+      autocomplete="off"
+    >
 
-<h2>Категории</h2>
-<div class="categories" id="categories"></div>
+    <div class="categories" id="categories">
+      <button class="category active" data-category="Все">Все</button>
+      <button class="category" data-category="Соцсети">Соцсети</button>
+      <button class="category" data-category="Покупки">Покупки</button>
+      <button class="category" data-category="Карты">Карты</button>
+      <button class="category" data-category="Музыка">Музыка</button>
+      <button class="category" data-category="Сервисы">Сервисы</button>
+    </div>
 
-<h2>Каталог приложений</h2>
-<div class="apps" id="apps"></div>
+    <h2 class="section-title">📱 Приложения</h2>
+    <div class="apps" id="apps"></div>
 
-<footer>RusApp Store · Независимый каталог приложений</footer>
+    <footer>
+      RusApp Store © 2026<br>
+      Неофициальный каталог приложений.<br>
+      Установка и доступность зависят от App Store и региона Apple ID.
+    </footer>
+  </main>
 
-<script>
-const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();}
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
 
-const applications=[
- {name:"VK",category:"Соцсети",icon:"💙",desc:"Общение и музыка",url:"https://www.rustore.ru/catalog/app/com.vkontakte.android"},
- {name:"Одноклассники",category:"Соцсети",icon:"🟠",desc:"Общение с друзьями",url:"https://www.rustore.ru/catalog/app/ru.ok.android"},
- {name:"Яндекс Браузер",category:"Инструменты",icon:"🔴",desc:"Быстрый интернет",url:"https://www.rustore.ru/catalog/app/com.yandex.browser"},
- {name:"Ozon",category:"Покупки",icon:"🛍️",desc:"Интернет-магазин",url:"https://www.rustore.ru/catalog/app/ru.ozon.app"},
- {name:"RuStore",category:"Инструменты",icon:"📱",desc:"Магазин приложений",url:"https://www.rustore.ru/"},
- {name:"Яндекс Музыка",category:"Музыка",icon:"🎵",desc:"Музыка и подкасты",url:"https://www.rustore.ru/catalog/app/ru.yandex.music"},
- {name:"VK Видео",category:"Видео",icon:"▶️",desc:"Видео и развлечения",url:"https://www.rustore.ru/"},
- {name:"2ГИС",category:"Инструменты",icon:"🗺️",desc:"Карты и навигация",url:"https://www.rustore.ru/catalog/app/ru.dublgis.dgismobile"}
-];
+    const appList = [
+      { name: "ВКонтакте", icon: "💙", category: "Соцсети", desc: "Общение, музыка и видео" },
+      { name: "Одноклассники", icon: "🟠", category: "Соцсети", desc: "Общение с друзьями" },
+      { name: "Яндекс Браузер", icon: "🔴", category: "Сервисы", desc: "Браузер и поиск" },
+      { name: "Яндекс Карты", icon: "🗺️", category: "Карты", desc: "Карты и маршруты" },
+      { name: "2ГИС", icon: "📍", category: "Карты", desc: "Городской справочник и карты" },
+      { name: "Ozon", icon: "🔵", category: "Покупки", desc: "Интернет-магазин" },
+      { name: "Wildberries", icon: "🟣", category: "Покупки", desc: "Покупки онлайн" },
+      { name: "Яндекс Музыка", icon: "🎵", category: "Музыка", desc: "Музыка и подкасты" },
+      { name: "Яндекс Go", icon: "🚕", category: "Сервисы", desc: "Поездки и доставка" },
+      { name: "VK Видео", icon: "▶️", category: "Соцсети", desc: "Видео и трансляции" }
+    ];
 
-const categories=["Все",...new Set(applications.map(a=>a.category))];
-let selected="Все";
+    const appsElement = document.getElementById("apps");
+    const searchElement = document.getElementById("search");
+    let selectedCategory = "Все";
 
-const categoryBox=document.getElementById("categories");
-const appBox=document.getElementById("apps");
-const search=document.getElementById("search");
+    function renderApps() {
+      const query = searchElement.value.trim().toLowerCase();
 
-function renderCategories(){
- categoryBox.innerHTML="";
- categories.forEach(category=>{
-  const b=document.createElement("button");
-  b.className="category"+(selected===category?" active":"");
-  b.textContent=category;
-  b.onclick=()=>{
-   selected=category;
-   renderCategories();
-   renderApps();
-  };
-  categoryBox.appendChild(b);
- });
-}
+      const filtered = appList.filter(app => {
+        const matchesCategory =
+          selectedCategory === "Все" || app.category === selectedCategory;
+        const matchesSearch =
+          app.name.toLowerCase().includes(query) ||
+          app.desc.toLowerCase().includes(query);
 
-function renderApps(){
- const q=search.value.trim().toLowerCase();
- const list=applications.filter(a=>
-  a.name.toLowerCase().includes(q)&&
-  (selected==="Все"||a.category===selected)
- );
- appBox.innerHTML="";
- if(!list.length){
-  appBox.innerHTML='<div class="empty">Ничего не найдено 😔</div>';
-  return;
- }
- list.forEach(a=>{
-  const card=document.createElement("div");
-  card.className="app";
+        return matchesCategory && matchesSearch;
+      });
 
-  const icon=document.createElement("div");
-  icon.className="app-icon";
-  icon.textContent=a.icon;
+      appsElement.innerHTML = "";
 
-  const info=document.createElement("div");
-  info.className="info";
+      if (filtered.length === 0) {
+        appsElement.innerHTML =
+          '<div class="empty" style="display:block">Ничего не найдено 😕</div>';
+        return;
+      }
 
-  const name=document.createElement("div");
-  name.className="name";
-  name.textContent=a.name;
+      filtered.forEach(app => {
+        const card = document.createElement("article");
+        card.className = "app";
 
-  const desc=document.createElement("div");
-  desc.className="desc";
-  desc.textContent=a.desc;
+        const icon = document.createElement("div");
+        icon.className = "app-icon";
+        icon.textContent = app.icon;
 
-  const link=document.createElement("a");
-  link.className="download";
-  link.textContent="Скачать";
-  link.href=a.url;
-  link.target="_blank";
-  link.rel="noopener noreferrer";
+        const title = document.createElement("h3");
+        title.textContent = app.name;
 
-  info.append(name,desc);
-  card.append(icon,info,link);
-  appBox.appendChild(card);
- });
-}
+        const description = document.createElement("p");
+        description.textContent = app.desc;
 
-search.addEventListener("input",renderApps);
-renderCategories();
-renderApps();
-</script>
+        const link = document.createElement("a");
+        link.className = "install";
+        link.textContent = "Открыть в App Store";
+        link.href =
+          "https://apps.apple.com/ru/search?term=" +
+          encodeURIComponent(app.name);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+
+        card.append(icon, title, description, link);
+        appsElement.appendChild(card);
+      });
+    }
+
+    searchElement.addEventListener("input", renderApps);
+
+    document.querySelectorAll(".category").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelector(".category.active")?.classList.remove("active");
+        button.classList.add("active");
+        selectedCategory = button.dataset.category;
+        renderApps();
+      });
+    });
+
+    renderApps();
+  </script>
 </body>
 </html>
